@@ -70,7 +70,7 @@
       "publisher": "CN=3E2F6B16-28C3-4276-919B-C80D5AE8D520",
       "backgroundColor": "#2b3e50",
       "displayName": "Global Conflicts ",
-      "identityName": "PiZZADOX.Global Conflicts ",
+      "identityName": "PiZZADOX.GlobalConflicts",
       "publisherDisplayName": "PiZZADOX",
       "languages": [
         "en"
@@ -94,6 +94,7 @@
     }
   ],
   "dependencies": {
+    "@angular/animations": "^16.2.12",
     "alertify": "^0.3.0",
     "angular": "^1.6.7",
     "angular-tooltips": "^1.2.2",
