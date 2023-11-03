@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html ng-app="App">
+<head>
+    <meta charset="UTF-8">
+    <title>Global Conflicts Launcher</title>
+
+    <style>
+        #app {
+            display: none;
+        }
+    </style>
+    <!-- angular -->
+    <script src="node_modules/angular/angular.js"></script>
+    <script src="node_modules/angular-tooltips/dist/angular-tooltips.min.js"></script>
+    <link href="node_modules/angular-tooltips/dist/angular-tooltips.min.css" rel="stylesheet">
+
+    <!-- tether -->
+    <link href="node_modules/tether/dist/css/tether.min.css" rel="stylesheet">
+    <script src="node_modules/tether/dist/js/tether.min.js"></script>
+
+    <!-- shepherd -->
+    <link href="node_modules/tether-shepherd/dist/css/shepherd-theme-square-dark.css" rel="stylesheet">
+
+    <!-- jquery -->
+    <script type="text/javascript">
+        window.$ = window.jQuery = require('./resources/jquery/jquery-1.12.3.min.js');
+    </script>
+
+    <!-- bootstrap -->
+    <link ng-href="resources/bootstrap/css/bootstrap_{{theme}}.min.css" rel="stylesheet">
+    <script src="node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- fa icons-->
+    <link rel="stylesheet" href="node_modules/font-awesome/css/font-awesome.min.css">
+
+    <!-- chartjs -->
+    <script src="node_modules/chart.js/dist/Chart.min.js"></script>
+
+    <!-- shepherd -->
+    <link rel="stylesheet" href="node_modules/tether-shepherd/dist/css/shepherd-theme-square.css"/>
+    <script src="node_modules/tether-shepherd/dist/js/shepherd.min.js"></script>
+    <script src="node_modules/tether-shepherd/dist/js/tether.js"></script>
+
+    <!-- alertify -->
+    <script src="node_modules/alertify/lib/alertify.min.js"></script>
+    <!-- include the core styles -->
+    <link rel="stylesheet" href="resources/css/alertify.core.css"/>
+
+    <!-- perfect-scrollbar -->
+    <script src="node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.min.js"></script>
+    <link rel="stylesheet" href="node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.min.css">
+
+    <link href="node_modules/icheck/skins/minimal/minimal.css" rel="stylesheet">
+
+    <!-- leaflet -->
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css">
+
+    <!-- custom css/js -->
+    <link rel="stylesheet" href="resources/css/custom.css">
+
+    <script type="text/javascript" src="app/require.js"></script>
+
+    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="app/controllers/aboutCtrl.js"></script>
+    <script type="text/javascript" src="app/controllers/changelogCtrl.js"></script>
+    <script type="text/javascript" src="app/controllers/modCtrl.js"></script>
+    <script type="text/javascript" src="app/controllers/navbarCtrl.js"></script>
+    <script type="text/javascript" src="app/controllers/serverCtrl.js"></script>
+    <script type="text/javascript" src="app/controllers/settingsCtrl.js"></script>
+</head>
+<body>
+<div id="app">
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">Global Conflicts Launcher</a>
+            </div>
+
+            <div ng-controller="navbarCtrl" class="collapse navbar-collapse" id="bs-navbar-collapse">
+                <ul class="nav navbar-nav">
+                    <li ng-repeat="tab in tabs" ng-class={'active':(slide==$index)} class="{{tab.tag}}" on-finish-render="ngRepeatFinished">
+                        <a ng-click="switchSlide(tab)" title="{{tab.title}}"><span class="{{tab.icon}}"></span></a>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Links<span class="caret"></span></a>
+                        <ul class="dropdown-menu" role="menu">
+                            <li><a href="https://www.GlobalConflicts.net" target="_blank">Website</a></li>
+                            <li><a href="https://www.GlobalConflicts.net/guides/" target="_blank">Guides</a></li>
+                            <li class="divider"></li>
+                            <li><a href="https://github.com/Global-Conflicts-ArmA/global-conflicts-website" target="_blank">Github</a></li>
+                        </ul>
+                    </li>
+                </ul> 
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <a href="ts3server://ts3.globalconflicts.net" title="Teamspeak"><i class="fa fa-microphone" aria-hidden="true"></i></a>
+                    </li>
+                    <li>
+                        <a href="https://www.GlobalConflicts.net/donate/" title="Donate"><i class="fa fa-heart" aria-hidden="true"></i></a>
+                    </li>
+                    <li ng-show="update_ready">
+                        <a ng-click="relaunchUpdate()" title="Launcher Update"><span class="glyphicon glyphicon-repeat"></span></a>
+                    </li>
+                    <li ng-show="updating">
+                        <a class="updating" title="Update wird geladen"><img src="resources/loading/ring-alt.svg"></a>
+                    </li>
+                    <li ng-show="downloading && downSpeed">
+                        <a><i class="fa fa-download" aria-hidden="true"></i> {{downSpeed}}/s</a>
+                    </li>
+                    <li ng-show="downloading && upSpeed">
+                        <a><i class="fa fa-upload" aria-hidden="true"></i> {{upSpeed}}/s</a>
+                    </li>
+                    <li class="reloadTabBtn">
+                        <a ng-click="refresh(true)" title="Reload Launcher"><span ng-class="reloadClass" class="glyphicon glyphicon-refresh"></span></a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div id="content" style="height: 100%" ng-cloak>
+        <div id="carousel-main" class="carousel slide" data-ride="carousel" style="height: 100%" data-interval="false">
+            <br>
+            <br>
+            <div class="carousel-inner" role="listbox">
+                <div class="item active">
+                    <div id="mods">
+                        <div class="container">
+                            <div ng-controller="modCtrl" data-ng-init="init()">
+                                <h3>Mods</h3>
+                                <hr>
+                                <div class="page">
+                                    <div class="row">
+                                        <div class="col-lg-8" ng-show="loading">
+                                            <div style="text-align: center">
+                                                <img src="resources/loading/cube.svg"/>
+                                            </div>
+                                        </div>
+                                        <ul class="nav nav-tabs">
+                                            <li ng-class={active:(0==$index)} class="serverTab" id="serverTab{{$index}}" ng-repeat="server in servers">
+                                                <img src="{{server.background}}" alt="server image file" width="50px">
+                                                <a ng-click="showTab($index)">{{server.name}}</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div id="modScroll" class="col-lg-10 modScroll" style="position: relative">
+                                        <div ng-show="!loading">
+                                            <div class="row">
+                                                <div class="col-md-6" ng-repeat="mod in activeMods">
+                                                    <div class="panel panel-primary">
+                                                        <div class="panel-body" style="text-align: center">
+                                                            <h4 tooltips>{{mod.full_name}}</h4>
+                                                            <hr>
+                                                            <h6 tooltips>{{mod.foldername}}</h6>
+                                                            <hr>
+                                                            <div class="btn-group btn-group-sm">
+                                                                <button class="btn btn-success btn-sm" ng-click="action(mod)" ng-disabled="downloading">{{mod.state[1]}}</button>
+                                                                <button class="btn btn-warning btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="initHash(mod)" ng-disabled="downloading">Prüfen</button>
+                                                                <button class="btn btn-danger btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="initBisignCheck(mod)" ng-disabled="downloading">Bisign</button>
+                                                                <button class="btn btn-primary btn-sm" ng-show="mod.state[0] === 3 && mod.HasGameFiles && mod.Torrent !== '' && mod.Torrent !== null" ng-disabled="downloading" ng-click="initTorrent(mod)"><i class="fa fa-upload" aria-hidden="true"></i> Seeden</button>
+                                                                <button class="btn btn-success btn-sm" ng-show="mod.state[0] !== 0 && mod.HasGameFiles" ng-click="openModDir(mod)"><span class=" glyphicon glyphicon-folder-open"></span></button>
+                                                                <button class="btn btn-success btn-sm" ng-show="mod.state[0] !== 0" ng-disabled="downloading || reloadDisabled" ng-click="refresh(true)"><span ng-class="reloadClass" class="glyphicon glyphicon-refresh"></span></button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div id="servers">
+                        <div class="container">
+                            <div class="row" ng-controller="serverCtrl" data-ng-init="init()">
+                                <h3>Server</h3>
+                                <hr>
+                                <div class="page">
+                                    <div style="text-align: center" ng-show="loading">
+                                        <img src="resources/loading/cube.svg"/>
+                                    </div>
+                                    <br>
+                                        <div id="serverPane{{serverId}}" class="tab-pane fade in serverPane">
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div ng-show="serverPlayerCount > 0">
+                                                        <h5>Players<i class="hover-underline cursor-pointer"></i><span class="pull-right">{{serverPlayerCount}}/{{serverSlots}}</span></h5>
+                                                        <ul id="playerScroll" class="list-group list-group-unbordered margin-none" style="height: 350px;position: relative;">
+                                                            <li class="list-group-item" ng-repeat="player in serverPlayers">
+                                                                <b>{{player.name}}</b>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <h5>Ping: <span class="pull-right"><span ng-if="!serverPing"><img tooltips tooltip-template="Attempting to ping server..." src="./resources/loading/ping-loading.svg"></span><span ng-if="serverPing" tooltips tooltip-template="Server Ping">{{serverPing}} ms</span></span></h5>
+                                                </div>
+                                            </div>
+                                            <form class="form-inline pull-right">
+                                                <div class="form-group-sm">
+                                                    <button type="button" class="btn btn-success btn-sm" ng-disabled="reloadDisabled" ng-click="refresh(true)"><span ng-class="reloadClass" class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Refresh</button>
+                                                    <label ng-if="profiles && serverAppId === 107410">
+                                                        <select class="form-control" ng-model="profiles.selected" ng-change="setProfile()" ng-options="profile for profile in profiles.available"></select>
+                                                    </label>
+                                                    <button type="button" class="btn btn-success btn-sm" ng-click="joinServer(server)"><i class="fa fa-play" aria-hidden="true"></i> Join Server</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div id="changelog">
+                        <div class="container" ng-controller="changelogCtrl" data-ng-init="init()">
+                            <h3>Changelog</h3>
+                            <hr>
+                            <div class="page">
+                                <ul id="changelogDiv" class="list-group list-group-unbordered margin-none" style="height: 650px;position: relative;">
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="item">
+                    <div id="settings">
+                        <div class="container" ng-controller="settingsCtrl" data-ng-init="init()">
+                            <h3>Settings</h3>
+                            <hr>
+                            <div class="page">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label for="pathInput">ArmA 3 Path</label>
+                                        <div class="input-group">
+                                            <input id="pathInput" class="form-control" type="text" placeholder="ArmA 3 path has not been set" ng-model="ArmaPath" disabled>
+                                            <span class="input-group-btn">
+                                                <button ng-disabled="downloading" class="btn btn-primary" type="button" ng-click="chooseArmaPath()"><span class="glyphicon glyphicon-open-file"></span></button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <div class="form-group form-inline">
+                                            <label for="splashCheck">Skip Splash Screen</label>
+                                            <span class="pull-right">
+                                                <input class="icheck" id="splashCheck" type="checkbox">
+                                            </span>
+                                            <hr>
+                                            <label for="introCheck">Skip Intro</label>
+                                            <span class="pull-right">
+                                                <input class="icheck" id="introCheck" type="checkbox">
+                                            </span>
+                                            <hr>
+                                            <label for="htCheck">Enable HyperThreading</label>
+                                            <span class="pull-right">
+                                                <input class="icheck" id="htCheck" type="checkbox">
+                                            </span>
+                                            <hr>
+                                            <label for="windowedCheck">Windowed mode</label>
+                                            <span class="pull-right">
+                                                <input class="icheck" id="windowedCheck" type="checkbox">
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="memInput">Maximum RAM</label>
+                                                    <input ng-model="mem" ng-change="saveSettings()" id="memInput" class="form-control" type="number">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="vmemInput">Maximum vRam</label>
+                                                    <input ng-model="vram" ng-change="saveSettings()" id="vmemInput" class="form-control" type="number">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label for="cpuInput">CPU Count</label>
+                                                    <input ng-model="cpu" ng-change="saveSettings()" id="cpuInput" class="form-control" type="number">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label for="threadsInput">Extra Threads</label>
+                                                    <input ng-model="thread" ng-change="saveSettings()" id="threadsInput" class="form-control" type="number">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="addInput">Additional Parameters</label>
+                                                    <input ng-model="add_params" ng-change="saveSettings()" id="addInput" class="form-control" type="text">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <hr class="margin-none">
+                                <div class="row">
+                                    <div class="col-md-4">
+                                        <form>
+                                            <div class="form-group form-inline">
+                                                <h5>Theme</h5>
+                                                <label for="lightSwitch">Light</label>
+                                                <span class="pull-right">
+                                                        <input class="icheck" id="lightSwitch" type="radio" name="theme">
+                                                </span>
+                                                <br>
+                                                <label for="darkSwitch">Dark</label>
+                                                <span class="pull-right">
+                                                        <input class="icheck" id="darkSwitch" type="radio" name="theme">
+                                                </span>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-md-8">
+                                        <form>
+                                            <div class="form-group form-inline">
+                                                <h5>Debug</h5>
+                                                <div class="btn-group btn-group-margin" role="group">
+                                                    <button class="btn btn-success" type="button" ng-click="openLatestRPT()">Open Latest RPT <i class="fa fa-upload" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-success" type="button" ng-click="openMPCache()">Open MP Mission Cache <i class="fa fa-folder-open" aria-hidden="true"></i></button>
+                                                    <button class="btn btn-success" type="button" ng-click="startA3Verify()">Verify ArmA 3 Steam Installation <i class="fa fa fa-cogs" aria-hidden="true"></i></button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+  $(document).on('click', 'a[href^="http"]', function(event) {
+    event.preventDefault();
+    shell.openExternal(this.href);
+  })
+
+  $(document).ready(() => {
+    $('.icheck').iCheck({
+      checkboxClass: 'icheckbox_minimal',
+      radioClass: 'iradio_minimal',
+      increaseArea: '20%'
+    })
+  })
+
+  $(window).load(() => {
+    helpers.appLoaded()
+  })
+</script>
+</body>
+</html>
