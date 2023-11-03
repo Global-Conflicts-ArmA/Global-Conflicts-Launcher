@@ -54,5 +54,5 @@ module.exports = {
       url: config.APIBaseURL + config.APIServerURL,
       callBackTarget: 'to-app'
     })
-  },
+  }
 }

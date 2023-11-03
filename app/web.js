@@ -8,7 +8,6 @@ const ps = require('ps-node')
 const exec = require('child_process').exec
 const config = require('../config')
 const pathf = require('path')
-const os = require('os')
 
 let agent = `Global Conflicts Launcher/${app.getVersion()} (${os.type()} ${os.release()}; ${os.platform()}; ${os.arch()}) - `
 
@@ -38,7 +37,7 @@ const getBot = (args) => {
   jsonist.get(args.url, {
     headers: {
       'user-agent': agent,
-      'port': parseInt(config.BotPort)
+      port: parseInt(config.BotPort)
     }
   }, (err, data, resp) => {
     getUrlCallback(args, err, data, resp)

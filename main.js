@@ -1,5 +1,8 @@
 const { app, dialog } = require('electron')
 const path = require('path')
+const jsonist = require('jsonist')
+const os = require('os')
+const { readdirSync, fsync, fstatSync, lstatSync } = require('original-fs')
 
 if (require('electron-squirrel-startup')) process.exit(0)
 // squirrel
@@ -59,7 +62,7 @@ autoUpdater.addListener('error', (err) => { // eslint-disable-line
 
 const version = app.getVersion()
 
-autoUpdater.setFeedURL('http://deploy.globalconflicts.net/update/win/' + version)
+autoUpdater.setFeedURL('https://github.com/Global-Conflicts-ArmA/Global-Conflicts-Launcher/' + version)
 autoUpdater.checkForUpdates()
 
 // real stuff that does something
@@ -191,7 +194,7 @@ const createTray = () => {
   tray = new Tray(app.getAppPath() + '\\resources\\icon\\tray.ico')
   const contextMenu = Menu.buildFromTemplate([
     {
-      label: 'Auf Updates prüfen',
+      label: 'Check for Updates',
       click: () => {
         if (typeof process.env.PORTABLE_EXECUTABLE_DIR !== 'undefined') {
           dialog.showMessageBox({
@@ -233,7 +236,7 @@ const createTray = () => {
       type: 'separator'
     },
     {
-      label: 'Beenden',
+      label: 'Quit',
       click: () => {
         app.quit()
       }

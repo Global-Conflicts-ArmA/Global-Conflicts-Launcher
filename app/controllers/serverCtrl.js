@@ -1,5 +1,4 @@
 angular.module('App').controller('serverCtrl', ['$scope', '$sce', ($scope, $sce) => {
-
   $scope.init = () => {
     $scope.loading = true
     $scope.getProfiles()
@@ -36,67 +35,67 @@ angular.module('App').controller('serverCtrl', ['$scope', '$sce', ($scope, $sce)
   }
 
   $scope.getPlayerDisplayText = (player) => {
-    return `• ${player.name}`;
+    return `• ${player.name}`
   }
 
   ipcRenderer.on('to-app', (event, args) => {
     switch (args.type) {
       case 'server-callback':
-        $scope.serverId = "Main Server"
-        //$scope.serverPlayers = args.data.players
+        $scope.serverId = 'Main Server'
+        // $scope.serverPlayers = args.data.players
         $scope.serverPlayers = [
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "pizzadox" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" },
-          { name: "w-cephei" }
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'pizzadox' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' },
+          { name: 'w-cephei' }
         ]
         $scope.serverName = args.data.name
         $scope.serverPlayerCount = $scope.serverPlayers.length
-        $scope.serverMissionName = "" 
+        $scope.serverMissionName = ''
         $scope.serverAppId = args.data.raw.appId
-        if ($scope.serverPlayerCount > -1 && args.data.raw.game != "Arma 3") {
+        if ($scope.serverPlayerCount > -1 && args.data.raw.game !== 'Arma 3') {
           $scope.serverMissionName = args.data.raw.game
         } else {
-          $scope.serverMissionName = "No Mission Selected"
+          $scope.serverMissionName = 'No Mission Selected'
         }
         $scope.serverPing = false
         ping.promise.probe(config.ServerIP)
-        .then(function (res) {
-          $scope.serverPing = res.time
-        })
+          .then(function (res) {
+            $scope.serverPing = res.time
+          })
         $('#playerScroll').perfectScrollbar()
         $scope.$apply()
         $scope.loading = false

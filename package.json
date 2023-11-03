@@ -9,10 +9,10 @@
   "readme": "README.md",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Global-Conflicts-ArmA/global-conflicts-website"
+    "url": "https://github.com/Global-Conflicts-ArmA/Global-Conflicts-Launcher"
   },
   "bugs": {
-    "url": "https://github.com/Global-Conflicts-ArmA/global-conflicts-website"
+    "url": "https://github.com/Global-Conflicts-ArmA/Global-Conflicts-Launcher"
   },
   "scripts": {
     "start": "electron .",
@@ -63,14 +63,19 @@
     "squirrelWindows": {
       "iconUrl": "build/appx/StoreLogo.png",
       "loadingGif": "build/install-spinner.gif",
-      "remoteReleases": "https://launcher.globalconflicts.net/remoteReleases/"
+      "remoteReleases": "https://github.com/Global-Conflicts-ArmA/Global-Conflicts-Launcher"
     },
     "appx": {
       "applicationId": "PiZZADOX.GlobalConflicts",
       "publisher": "CN=3E2F6B16-28C3-4276-919B-C80D5AE8D520",
       "backgroundColor": "#2b3e50",
+<<<<<<< Updated upstream
       "displayName": "Global Conflicts ",
       "identityName": "PiZZADOX.Global Conflicts ",
+=======
+      "displayName": "Global Conflicts",
+      "identityName": "PiZZADOX.GlobalConflicts",
+>>>>>>> Stashed changes
       "publisherDisplayName": "PiZZADOX",
       "languages": [
         "en"

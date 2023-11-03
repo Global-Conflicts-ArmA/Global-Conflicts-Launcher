@@ -1,5 +1,3 @@
-const { readdirSync, fsync, fstatSync, lstatSync } = require('original-fs')
-
 angular.module('App').controller('settingsCtrl', ['$scope', '$rootScope', ($scope, $rootScope) => {
   $scope.init = () => {
     storage.get('settings', (err, data) => {
@@ -143,7 +141,7 @@ angular.module('App').controller('settingsCtrl', ['$scope', '$rootScope', ($scop
 
   $scope.openLatestRPT = () => {
     const arma3path = path.join(app.getPath('appData'), '..', 'Local', 'Arma 3')
-    var files = readdirSync(arma3path)
+    const files = readdirSync(arma3path)
       .filter(f => f.endsWith('.rpt'))
       .map(f => {
         return {
@@ -151,9 +149,9 @@ angular.module('App').controller('settingsCtrl', ['$scope', '$rootScope', ($scop
           time: lstatSync(arma3path + '\\' + f).mtime.getTime()
         }
       })
-      .sort((a, b) => b.time - a.time);
+      .sort((a, b) => b.time - a.time)
     console.log(arma3path)
-    str = JSON.stringify(files)
+    const str = JSON.stringify(files)
     console.log(str)
     const file = files[0].name
     shell.openExternal(file)
