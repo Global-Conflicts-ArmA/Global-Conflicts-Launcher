@@ -2,7 +2,6 @@ const { app, dialog } = require('electron')
 const path = require('path')
 const jsonist = require('jsonist')
 const os = require('os')
-const { readdirSync, fsync, fstatSync, lstatSync } = require('original-fs')
 
 if (require('electron-squirrel-startup')) process.exit(0)
 // squirrel

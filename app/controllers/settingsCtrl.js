@@ -141,12 +141,12 @@ angular.module('App').controller('settingsCtrl', ['$scope', '$rootScope', ($scop
 
   $scope.openLatestRPT = () => {
     const arma3path = path.join(app.getPath('appData'), '..', 'Local', 'Arma 3')
-    const files = readdirSync(arma3path)
+    const files = fs.readdirSync(arma3path)
       .filter(f => f.endsWith('.rpt'))
       .map(f => {
         return {
           name: arma3path + '\\' + f,
-          time: lstatSync(arma3path + '\\' + f).mtime.getTime()
+          time: fs.lstatSync(arma3path + '\\' + f).mtime.getTime()
         }
       })
       .sort((a, b) => b.time - a.time)
